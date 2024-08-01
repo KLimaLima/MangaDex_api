@@ -9,9 +9,7 @@ def get_list_all(manga_id: str):
         f'{URL_BASE}/manga/{manga_id}/feed'
         )
     
-    # print(response.json())
     response = response.json()
-    # print('data', response[KEY_DATA])
     return response[KEY_DATA]
 
 def get_list(manga_id: str, languages: list[str] = [ENGLISH]):
@@ -34,16 +32,5 @@ def get_list(manga_id: str, languages: list[str] = [ENGLISH]):
     attributes has keys: volume, chapter, title, createdAt, updatedAt, pages, version, translatedLanguage, externalUrl, publishAt, readableAt
     '''
     response = response.json()
-
-    # for i in response[KEY_DATA]:
-    #     print('chp_id, get_list=>', i)
-
-    # print('result: ', response[KEY_DATA][0]['relationships'][1]['attributes']['title']['en'])
-    # for i in response[KEY_DATA]:
-    #     print('result', i['relationships'][1]['attributes']['title']['en'])
-
-    # print('chp_id, get_list=>', response.keys())
-    # print('chp_id, get_list[data]=>', response[KEY_DATA])
-    # print('chp_id, get_list[data]=>', response[KEY_DATA][0])
 
     return response[KEY_DATA]

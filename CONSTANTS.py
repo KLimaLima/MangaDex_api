@@ -9,6 +9,7 @@ KEY_CHP = 'chapter'
 KEY_CHP_HASH = 'hash'
 KEY_DATA = 'data'
 KEY_DATASAVER = 'data-saver'
+KEY_ATTR = 'attributes'
 
 # LANGUAGE
 ENGLISH = 'en'
