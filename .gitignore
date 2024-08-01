@@ -1,3 +1,6 @@
+# Files and Folders added manually
+MangaDex/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
