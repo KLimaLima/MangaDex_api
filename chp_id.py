@@ -33,7 +33,8 @@ def get_filtered(manga_id: str, languages: list[str] = [ENGLISH]):
                 'translatedLanguage[]': languages,
                 'includes[]': 'manga',
                 'order[chapter]': 'asc'
-            }            
+            },
+            timeout= 3
         )        
     except Exception as error:
         print(f'Error: {error}\nSkipped: could not get response, check internet connection')

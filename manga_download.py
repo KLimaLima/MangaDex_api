@@ -9,7 +9,8 @@ from CONSTANTS import *
 def chp_get_component(chp_id: str):
 
     response = requests.get(
-        f'{URL_CHP_ID}/{chp_id}'
+        f'{URL_CHP_ID}/{chp_id}',
+        timeout= 3
         )
     
     response = response.json()
@@ -24,8 +25,18 @@ def chp_get_component(chp_id: str):
 # FIXME: handle folder(if downloading failed, delete the folder indicating that the download is not successful)
 def one_chp(chp_id: str, data_saver: bool= True):
 
+    # print(chp_id)
+    # with open('log.txt', 'w') as log:
+
     try:
-        manga_title = chp_id['relationships'][1]['attributes']['title']['en']
+        # FIXME: make it so that it checks if the type is manga or not
+        # TODO: make it so that all other similar code does the same
+        for relationship in chp_id['relationships']:
+            if relationship['type'] == 'manga':
+                attr_manga = relationship
+        print('attr                     ', attr_manga)
+        manga_title = attr_manga['attributes']['title']['en']
+        # manga_title = chp_id['relationships'][1]['attributes']['title']['en']
         chp_number = chp_id['attributes']['chapter']
         folder_path = f'MangaDex/{manga_title}/chp{chp_number}'
         os.makedirs(folder_path)

@@ -18,7 +18,7 @@ Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life = '23aadc44-d
 
 the_beginner_formerly_ranked_number_one_in_the_world = '7139b5c1-3740-4bf4-a157-2888af7f2420'
 
-chp_ids = chp_id.get_filtered(Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life)
+chp_ids = chp_id.get_filtered('0051e50a-e30c-4bb2-b378-c3da82463ee1')
 manga_download.all_chps(chp_ids, data_saver= False)
 
 # chp_ids = chp_id.get_list(ol_vtuber_to_oshi_jk_chan)
