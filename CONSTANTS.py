@@ -13,3 +13,5 @@ KEY_ATTR = 'attributes'
 
 # LANGUAGE
 ENGLISH = 'en'
+
+TIMEOUT = 30
