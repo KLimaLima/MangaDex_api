@@ -1,120 +1,61 @@
 import requests
-import os
-import sys
 
-import filename_data
-import data_crawler
 from CONSTANTS import *
 
-# THIS IS CHAPTER ID, NOT MANGA ID
-def get_components(chp_id: str):
+ID = 'id'
+ATTR = 'attributes'
+RELATIONSHIP = 'relationships'
+VOL = 'volume'
+CHP = 'chapter'
+TITLE = 'title'
+LANG = 'translatedLanguage'
+PAGES = 'pages'
+VER = 'version'
 
-    response = requests.get(
-        f'{URL_CHP_ID}/{chp_id}',
-        timeout= TIMEOUT
-        )
-    
-    response = response.json()
+class Chapter:
 
-    return response[KEY_CHP_URL], response[KEY_CHP][KEY_CHP_HASH], response[KEY_CHP][KEY_DATA], response[KEY_CHP]['dataSaver']
+    def __init__(self) -> None:
 
-# TODO: Create a feature to check if data is empty or not
-# FIXME: Refactor to be similar to get_list
-def ids_get_all(manga_id: str):
+        # refactor these; used the manga feed endpoints
+        self.id: str
+        self.attributes: str
+        self.relationships: str
 
-    response = requests.get(
-        f'{URL_BASE}/manga/{manga_id}/feed'
-        )
-    
-    response = response.json()
-    return response[KEY_DATA]
+        self.volume: str
+        self.chapter: str
+        self.title: str
+        self.lang: str
+        self.pages: str
+        self.version: str
 
-# TODO: do pagination if exist
-def ids_get_filtered(manga_id: str, languages: list[str] = [ENGLISH]):
+    def set_metadata_feed(self, chp_dict: dict):
 
-    try:
+        self.id = chp_dict[ID]
+        self.attributes = chp_dict[ATTR]
+        self.relationships = chp_dict[RELATIONSHIP]
+
+        self.volume = self.attributes[VOL]
+        self.chapter = self.attributes[CHP]
+        self.title = self.attributes[TITLE]
+        self.lang = self.attributes[LANG]
+        self.pages = self.attributes[PAGES]
+        self.version = self.attributes[VER]
+
+    def set_metadata_aggregate(self, id, volume, chapter):
+
+        self.id = id
+        self.volume = volume
+        self.chapter = chapter
+
+        print(f'id:{self.id}, volume:{self.volume}, chapter:{self.chapter}')
+
+    def get_components(self):
+
         response = requests.get(
-            f'{URL_BASE}/manga/{manga_id}/feed',
-            params= {
-                'translatedLanguage[]': languages,
-                'includes[]': 'manga',
-                'order[chapter]': 'asc',
-                'contentRating[]': ['safe', 'suggestive']
-            },
+            f'{URL_CHP_ID}/{self.id}',
             timeout= TIMEOUT
         )
-        # print('url: ', response.url)
-    except Exception as error:
-        print(f'Error: {error}\nSkipped: could not get response for {manga_id}, check internet connection')
-        sys.exit(0)
 
-    response = response.json()
-    # print(response)
+        response = response.json()
 
-    return response[KEY_DATA]
-
-# TODO: extract data for chp volume, description and chapter title
-# FIXME: data_saver is not working(only high quality is working)
-# FIXME: maybe can print downloading and skipped message here(do before doing get request; chp_get_component())
-# Problem is probably due to chp_id being passed is the high quality data
-# not suitable with link data-saver as link data-saver use different chp_id
-# FIXME: handle folder(if downloading failed, delete the folder indicating that the download is not successful)
-def download_one(chp_id: str, data_saver: bool= True):
-
-    try:
-        # TODO: make it so that all other similar code does the same
-        manga_title = data_crawler.list_of_dict(chp_id['relationships'], 'type', 'manga')
-        manga_title = manga_title[0]['attributes']['title']['en'] # TODO: Currently just use the first element in list
-        chp_number = chp_id['attributes']['chapter']
-
-        folder_path = f'MangaDex/{manga_title}/chp{chp_number}'
-        os.makedirs(folder_path)
-
-        url, hash, pages_original, pages_low_quality = get_components(chp_id[KEY_ID])
-
-    except FileExistsError:
-        print('Skipped:', manga_title, 'chapter', chp_number, 'already exists')
-        return
-    
-    except Exception as error:
-        print(f'{error}\nSkipped: could not get response for {manga_title}, check internet connection')
-        # TODO: create function to handle delete whole folder, wheter there is files in it or not by default
-        os.rmdir(folder_path)
-        sys.exit(0)
-    
-    quality = KEY_DATASAVER
-    pages = pages_low_quality
-    if(not data_saver):
-        quality = KEY_DATA
-        pages = pages_original
-
-    print('Downloading:', manga_title, 'chapter' ,chp_number)
-    progress = True
-
-    for page in pages:
-
-        file_type = filename_data.get_file_type(page)
-        page_number = filename_data.get_page_number(page)
-
-        try:
-            downloading = requests.get(
-                f'{url}/{quality}/{hash}/{page}',
-                timeout= TIMEOUT
-            )
-            with open(f'{folder_path}/{manga_title}_chp{chp_number}_{page_number}.{file_type}', 'wb') as writing:
-                writing.write(downloading.content)
-        except TimeoutError:
-            print('Took too long to response:', manga_title, 'chapter' ,chp_number)
-        except Exception as error:
-            print(error)
-            print('Failed:', manga_title, 'chapter' ,chp_number)
-            progress = False
-            break
-    
-    if progress:
-        print('Successful:', manga_title, 'chapter' ,chp_number)
-
-def all_chps(chp_ids: list[str], data_saver: bool= True):
-
-    for chp_id in chp_ids:
-        download_one(chp_id, data_saver= data_saver)
+        return response[KEY_CHP_URL], response[KEY_CHP][KEY_CHP_HASH], response[KEY_CHP][KEY_DATA], response[KEY_CHP]['dataSaver']
