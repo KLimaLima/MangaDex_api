@@ -3,9 +3,11 @@ import util_response
 
 Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life = '23aadc44-d2fe-46ca-83a6-6c86fd36ee12'
 
-manga_test = manga.Manga(Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life, 'en')
+manga_test = manga.Manga(Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life, 'bm')
 
-manga_test.create_chapters()
+manga_test.update_manga_metadata()
+
+# manga_test.create_chapters()
 
 # manga_test.title = {'en': 'Bouken ni wa, Buki ga Hitsuyou da! ~Kodawari Rudy no Kajiya Gurashi~', 'ja': '冒険には、武器が必要だ！～こだわりルディの鍛冶屋ぐらし～'}
 

@@ -110,21 +110,22 @@ class Manga:
             self.error_message('Unable to get data from server')
             return False
 
-        if metadata['id'] != self.id:
+        if self._cartel_metadata['id'] != self.id:
             self.error_message('Different json was received')
             return False
         
-        metadata = metadata['attributes']
+        metadata_attr = self._cartel_metadata['attributes']
 
-        self.original_lang = metadata['originalLanguage']
+        self.original_lang = metadata_attr['originalLanguage']
         # this 'appends' the original language to pref_lang so that it takes the original language if user prefered language is not available
         self.pref_lang += self.original_lang,
 
-        self.title = util_response.dict_values_grabber(metadata['title'], self.pref_lang)
-        self.description = util_response.dict_values_grabber(metadata['description'], self.pref_lang)
-        self.alt_title = util_response.dict_values_grabber(util_response.list_dict_to_dict_list(metadata['altTitles']),self.pref_lang)
+        self.title = util_response.dict_values_grabber(metadata_attr['title'], self.pref_lang)
+        self.description = util_response.dict_values_grabber(metadata_attr['description'], self.pref_lang)
+        self.alt_title = util_response.dict_values_grabber(util_response.list_dict_to_dict_list(metadata_attr['altTitles']),self.pref_lang)
 
-        print(f'About Manga >\ntitle:{self.title}, desc:{self.description}, alt_title:{self.alt_title}')
+        print(f'About Manga >\ntitle:{self.title}\ndesc:{self.description}\nalt_title:{self.alt_title}')
+        return True
 
     def zip_cbz_one_chp(self, chp_num: float):
 
