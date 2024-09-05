@@ -16,10 +16,14 @@ class Chapter:
 
     def __init__(self) -> None:
 
-        # refactor these; used the manga feed endpoints
         self.id: str
-        self.attributes: str
-        self.relationships: str
+
+        self.url: str
+        self.hash: str
+        self.original_quality: str
+        self.low_quality: str
+
+        self.manga_title: str
 
         self.volume: str
         self.chapter: str
@@ -28,20 +32,22 @@ class Chapter:
         self.pages: str
         self.version: str
 
-    def set_metadata_feed(self, chp_dict: dict):
+    def set_metadata_feed(self, cartel_feed: dict):
 
-        self.id = chp_dict[ID]
-        self.attributes = chp_dict[ATTR]
-        self.relationships = chp_dict[RELATIONSHIP]
+        self.id = cartel_feed[ID]
+        attributes = cartel_feed[ATTR]
+        relationships = cartel_feed[RELATIONSHIP]
 
-        self.volume = self.attributes[VOL]
-        self.chapter = self.attributes[CHP]
-        self.title = self.attributes[TITLE]
-        self.lang = self.attributes[LANG]
-        self.pages = self.attributes[PAGES]
-        self.version = self.attributes[VER]
+        self.volume = attributes[VOL]
+        self.chapter = attributes[CHP]
+        self.title = attributes[TITLE]
+        self.lang = attributes[LANG]
+        self.pages = attributes[PAGES]
+        self.version = attributes[VER]
 
     def set_metadata_aggregate(self, id, volume, chapter):
+
+        # TODO: make a util finction that takes chp_number and converts it to double digits
 
         self.id = id
         self.volume = volume
@@ -51,11 +57,29 @@ class Chapter:
 
     def get_components(self):
 
-        response = requests.get(
-            f'{URL_CHP_ID}/{self.id}',
-            timeout= TIMEOUT
-        )
+        try:
+            response = requests.get(
+                f'{URL_CHP_ID}/{self.id}',
+                timeout= TIMEOUT
+                )
 
+        except Exception as error:
+            print(f'Error in chapter.py\nerror:{error}')
+            return False
+        
         response = response.json()
 
-        return response[KEY_CHP_URL], response[KEY_CHP][KEY_CHP_HASH], response[KEY_CHP][KEY_DATA], response[KEY_CHP]['dataSaver']
+        self.url = response[KEY_CHP_URL]
+        self.hash = response[KEY_CHP][KEY_CHP_HASH]
+        self.original_quality = response[KEY_CHP][KEY_DATA]
+        self.low_quality = response[KEY_CHP]['dataSaver']
+
+        return True
+    
+    def download(self, data_saver: bool= True):
+        
+        if not self.get_components():
+            self.error_message('Unable to get components')
+
+    def error_message(self, message: str):
+        print(f'chapter id: {self.id}\nerror: {message}')

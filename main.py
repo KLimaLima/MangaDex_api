@@ -3,11 +3,25 @@ import util_response
 
 Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life = '23aadc44-d2fe-46ca-83a6-6c86fd36ee12'
 
-manga_test = manga.Manga(Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life, 'bm')
+# manga_test = manga.Manga(Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life, 'en')
 
-manga_test.update_manga_metadata()
+# manga_test.update_manga_metadata()
 
 # manga_test.create_chapters()
+
+# my_room_dungeon_rest = '6e018caf-86c6-4740-b1db-d5a040430d2b'
+
+lazy_dungeon_master = '0051e50a-e30c-4bb2-b378-c3da82463ee1'
+
+akmkdsm = 'a04d4899-54c7-4f2e-a0a9-2338999ad6ac'
+
+manga_test2 = manga.Manga(akmkdsm, 'en')
+
+manga_test2.update_manga_metadata()
+
+manga_test2.create_chapters_aggregate()
+
+manga_test2.cbz_chp_all()
 
 # manga_test.title = {'en': 'Bouken ni wa, Buki ga Hitsuyou da! ~Kodawari Rudy no Kajiya Gurashi~', 'ja': '冒険には、武器が必要だ！～こだわりルディの鍛冶屋ぐらし～'}
 
