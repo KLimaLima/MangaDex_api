@@ -186,7 +186,7 @@ class Manga:
                 chapter_num = chapter['chapter']
 
                 append_chapter = Chapter()
-                append_chapter.set_metadata_aggregate(chapter_id, chapter_volume, chapter_num)
+                append_chapter.set_metadata_aggregate(self.title, chapter_id, chapter_volume, chapter_num)
                 self.chapters.append(append_chapter)
 
         print('finished creating chapters')
