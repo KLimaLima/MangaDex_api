@@ -32,7 +32,6 @@ class Manga:
         self.original_lang: str #✔️
 
         self.chapters: list[Chapter] = []
-        self.chapters_num: list[float]
 
         # util properties
         self.pref_lang: tuple = pref_lang

@@ -14,7 +14,7 @@ VER = 'version'
 
 class Chapter:
 
-    def __init__(self) -> None:
+    def __init__(self, manga_title: str) -> None:
 
         self.id: str
 
@@ -23,7 +23,7 @@ class Chapter:
         self.original_quality: str
         self.low_quality: str
 
-        self.manga_title: str
+        self.manga_title: str = manga_title
 
         self.volume: str
         self.chapter: str
@@ -81,6 +81,8 @@ class Chapter:
         
         if not self.get_components():
             self.error_message('Unable to get components')
+
+        
 
     def error_message(self, message: str):
         print(f'chapter id: {self.id}\nerror: {message}')
