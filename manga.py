@@ -26,9 +26,13 @@ class Manga:
         self._cartel_aggregate = None
         self._cartel_feed = None
 
-        self.title: dict[str] #✔️
-        self.alt_title: dict[str] #✔️ prob; list_dict_to_dict_list not tested yet
-        self.description: dict[str] #✔️
+        self.dict_title: dict[str] #✔️
+        self.dict_alt_title: dict[str] #✔️ prob; list_dict_to_dict_list not tested yet
+        self.dict_description: dict[str] #✔️
+
+        self.title: str
+        self.alt_title: str
+        self.description: str
         self.original_lang: str #✔️
 
         self.chapters: list[Chapter] = []
@@ -133,16 +137,16 @@ class Manga:
             # this 'appends' the original language(self.original_lang) to pref_lang(self.pref_lang) so that it takes the original language if user prefered language is not available
             self.pref_lang += self.original_lang, # NOTE: this is tuple
 
-        self.title = util_response.dict_values_grabber(metadata_attr['title'], self.pref_lang)
-        self.description = util_response.dict_values_grabber(metadata_attr['description'], self.pref_lang)
-        self.alt_title = util_response.dict_values_grabber(util_response.list_dict_to_dict_list(metadata_attr['altTitles']),self.pref_lang)
+        self.dict_title = util_response.dict_values_grabber(metadata_attr['title'], self.pref_lang)
+        self.dict_description = util_response.dict_values_grabber(metadata_attr['description'], self.pref_lang)
+        self.dict_alt_title = util_response.dict_values_grabber(util_response.list_dict_to_dict_list(metadata_attr['altTitles']),self.pref_lang)
 
-        print(f'About Manga >\ntitle:{self.title}\ndesc:{self.description}\nalt_title:{self.alt_title}')
+        print(f'About Manga >\ntitle:{self.dict_title}\ndesc:{self.dict_description}\nalt_title:{self.dict_alt_title}')
         return True
     
     def cbz_one_chp(self, chp: Chapter):
 
-        title_in_lang = util_response.dict_1_value_chooser(data= self.title, keys= self.pref_lang)
+        title_in_lang = util_response.dict_1_value_chooser(data= self.dict_title, keys= self.pref_lang)
 
         dir_to_zip = f'./{self.root_folder_name}/{title_in_lang}/chp{chp.chapter}'
         the_zip_file = f'{dir_to_zip}.cbz'
@@ -185,7 +189,7 @@ class Manga:
                 chapter_id = chapter['id']
                 chapter_num = chapter['chapter']
 
-                append_chapter = Chapter(util_response.dict_1_value_chooser(self.title, self.pref_lang))
+                append_chapter = Chapter(util_response.dict_1_value_chooser(self.dict_title, self.pref_lang))
                 append_chapter.set_metadata_aggregate(chapter_id, chapter_volume, chapter_num)
                 self.chapters.append(append_chapter)
 
