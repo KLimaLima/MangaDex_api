@@ -45,11 +45,10 @@ class Chapter:
         self.pages = attributes[PAGES]
         self.version = attributes[VER]
 
-    def set_metadata_aggregate(self, manga_title, id, volume, chapter):
+    def set_metadata_aggregate(self, id, volume, chapter):
 
         # TODO: make a util finction that takes chp_number and converts it to double digits
 
-        self.manga_title = manga_title
         self.id = id
         self.volume = volume
         self.chapter = chapter
@@ -81,8 +80,6 @@ class Chapter:
         
         if not self.get_components():
             self.error_message('Unable to get components')
-
-        
 
     def error_message(self, message: str):
         print(f'chapter id: {self.id}\nerror: {message}')
