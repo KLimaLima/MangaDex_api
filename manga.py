@@ -114,6 +114,7 @@ class Manga:
         Updates the manga metadata
         """
 
+        # FIXME: remove this; follow single responsibilty rule
         if not self.get_manga_metadata():
             self.error_message('Unable to get data from server')
             return False
@@ -184,7 +185,7 @@ class Manga:
                 chapter_id = chapter['id']
                 chapter_num = chapter['chapter']
 
-                append_chapter = Chapter()
+                append_chapter = Chapter(self.title)
                 append_chapter.set_metadata_aggregate(self.title, chapter_id, chapter_volume, chapter_num)
                 self.chapters.append(append_chapter)
 
