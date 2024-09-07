@@ -201,10 +201,10 @@ class Manga:
 
         return True
     
-    def download_chapter_all(self):
+    def download_chapter_all(self, data_saver: bool= True):
         
         self.manga_folder = f'MangaDex/{self.title}'
 
         for chapter in self.chapters:
 
-            chapter.download(self.manga_folder)
+            chapter.download(self.manga_folder, data_saver= data_saver)
