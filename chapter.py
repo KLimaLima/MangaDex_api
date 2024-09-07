@@ -1,5 +1,7 @@
+import os
 import requests
 
+import util_filename
 from CONSTANTS import *
 
 ID = 'id'
@@ -20,8 +22,8 @@ class Chapter:
 
         self.url: str
         self.hash: str
-        self.original_quality: str
-        self.low_quality: str
+        self.pages_original_quality: str
+        self.pages_low_quality: str
 
         self.manga_title: str = manga_title
 
@@ -71,15 +73,49 @@ class Chapter:
 
         self.url = response[KEY_CHP_URL]
         self.hash = response[KEY_CHP][KEY_CHP_HASH]
-        self.original_quality = response[KEY_CHP][KEY_DATA]
-        self.low_quality = response[KEY_CHP]['dataSaver']
+        self.pages_original_quality = response[KEY_CHP][KEY_DATA]
+        self.pages_low_quality = response[KEY_CHP]['dataSaver']
 
         return True
     
-    def download(self, data_saver: bool= True):
+    def download(self, folder_path: str, data_saver: bool= True):
         
         if not self.get_components():
             self.error_message('Unable to get components')
+            return False
+
+        folder_path += f'/chp{self.chapter}'
+
+        os.makedirs(folder_path)
+
+        quality = KEY_DATASAVER
+        pages = self.pages_low_quality
+        if not data_saver:
+            quality = KEY_DATA
+            pages = self.pages_original_quality
+
+        for page in pages:
+
+            file_type = util_filename.get_file_type(page)
+            page_number = util_filename.get_page_number(page)
+
+            try:
+                downloading = requests.get(
+                    f'{self.url}/{quality}/{self.hash}/{page}',
+                    timeout= TIMEOUT
+                )
+
+                with open(f'{folder_path}/{page_number}_chp{self.chapter}_{self.manga_title}.{file_type}', 'wb') as writing:
+                    writing.write(downloading.content)
+
+            except Exception as error:
+                self.error_message(str(error))
+                return False
+
+            else:
+                print(f'Downloaded page: {page_number} chapter: {self.chapter} manga: {self.manga_title}')
+
+        return True
 
     def error_message(self, message: str):
         print(f'chapter id: {self.id}\nerror: {message}')

@@ -10,8 +10,6 @@ from CONSTANTS import *
 
 # class Manga will help in when creating cbz files to put metadata and other stuff as well
 
-# new plan; to get the manga metadata, just request for 1 first only
-# afterwards get the next chp ids in bulk without manga reference expansion (but scanlation and users if hoshi)
 # Manga manages the chapters
 class Manga:
 
@@ -39,7 +37,7 @@ class Manga:
 
         # util properties
         self.pref_lang: tuple = pref_lang
-        self.manga_folder: str = 'MangaDex'
+        self.manga_folder: str
 
     # https://api.mangadex.org/docs/redoc.html#tag/Manga/operation/get-manga-id-feed
     # gives more information about chapters such as title if exist
@@ -141,6 +139,10 @@ class Manga:
         self.dict_description = util_response.dict_values_grabber(metadata_attr['description'], self.pref_lang)
         self.dict_alt_title = util_response.dict_values_grabber(util_response.list_dict_to_dict_list(metadata_attr['altTitles']),self.pref_lang)
 
+        self.title = util_response.dict_1_value_chooser(self.dict_title, self.pref_lang)
+        self.alt_title = util_response.dict_1_value_chooser(self.dict_alt_title, self.pref_lang)
+        self.description = util_response.dict_1_value_chooser(self.dict_description, self.pref_lang)
+
         print(f'About Manga >\ntitle:{self.dict_title}\ndesc:{self.dict_description}\nalt_title:{self.dict_alt_title}')
         return True
     
@@ -198,3 +200,11 @@ class Manga:
         self.chapters.sort(key=lambda x: float(x.chapter))
 
         return True
+    
+    def download_chapter_all(self):
+        
+        self.manga_folder = f'MangaDex/{self.title}'
+
+        for chapter in self.chapters:
+
+            chapter.download(self.manga_folder)
