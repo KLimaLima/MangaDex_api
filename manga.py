@@ -39,7 +39,7 @@ class Manga:
 
         # util properties
         self.pref_lang: tuple = pref_lang
-        self.root_folder_name: str = 'MangaDex'
+        self.manga_folder: str = 'MangaDex'
 
     # https://api.mangadex.org/docs/redoc.html#tag/Manga/operation/get-manga-id-feed
     # gives more information about chapters such as title if exist
@@ -148,7 +148,7 @@ class Manga:
 
         title_in_lang = util_response.dict_1_value_chooser(data= self.dict_title, keys= self.pref_lang)
 
-        dir_to_zip = f'./{self.root_folder_name}/{title_in_lang}/chp{chp.chapter}'
+        dir_to_zip = f'./{self.manga_folder}/{title_in_lang}/chp{chp.chapter}'
         the_zip_file = f'{dir_to_zip}.cbz'
 
         folder = pathlib.Path(dir_to_zip)
