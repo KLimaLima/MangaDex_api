@@ -1,5 +1,5 @@
-import manga
-import util_response
+import manga.manga as manga
+import util.response as response
 
 Every_Adventure_Needs_Weapons_The_Meticulous_Rudys_Blacksmith_Life = '23aadc44-d2fe-46ca-83a6-6c86fd36ee12'
 
