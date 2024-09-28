@@ -18,6 +18,11 @@ def dict_values_grabber(data: dict, keys: tuple):
         if key in data.keys():
             result[key]= data[key]
 
+    if not result:
+        for key, value in data.items():
+            result[key]= value
+            break
+
     return result
 
 def list_dict_to_dict_list(datas: list[dict]):
