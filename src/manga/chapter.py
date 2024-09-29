@@ -1,8 +1,8 @@
 import os
 import requests
 
-import util_filename
-from CONSTANTS import *
+import util.filename as filename
+from util.CONSTANTS import *
 
 ID = 'id'
 ATTR = 'attributes'
@@ -96,8 +96,8 @@ class Chapter:
 
         for page in pages:
 
-            file_type = util_filename.get_file_type(page)
-            page_number = util_filename.get_page_number(page)
+            file_type = filename.get_file_type(page)
+            page_number = filename.get_page_number(page)
 
             try:
                 downloading = requests.get(
